@@ -33,9 +33,7 @@ def make_session_permanent():
 # ... [rest of your existing code]
 # Simple sentiment analysis without NLTK
 class SimpleSentimentAnalyzer:
-    # ... [rest of your existing SimpleSentimentAnalyzer class]
-# Initialize session AFTER app creation
-Session(app)
+    Session(app)
 
 # Simple sentiment analysis without NLTK
 class SimpleSentimentAnalyzer:
@@ -811,4 +809,5 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=port,
         debug=False  # Always False in production
+
     )
