@@ -784,5 +784,15 @@ def internal_error(error):
     return render_template('error.html', message="Internal server error"), 500
 
 # Only run if this file is executed directly
+# At the end of app.py, replace the existing __main__ block with:
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Get port from environment variable or default to 5000
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Run the app
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=False  # Always False in production
+    )
