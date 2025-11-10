@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# -*- coding: utf-8 -*-
-
 from flask import Flask, render_template, request, jsonify, session, send_file, redirect
 import json
 import random
@@ -11,6 +9,7 @@ from datetime import datetime, timedelta
 import io
 import math
 
+# Configuration class
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'ai-interview-chatbot-advanced-2024'
     PERMANENT_SESSION_LIFETIME = timedelta(hours=2)
@@ -21,17 +20,15 @@ class Config:
     COMMUNICATION_WEIGHT = 0.3
     BEHAVIORAL_WEIGHT = 0.3
 
+# Initialize Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Simple session management without Flask-Session
+# Make session permanent
 @app.before_request
 def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(hours=2)
-
-class SimpleSentimentAnalyzer:
-    Session(app)
 
 # Simple sentiment analysis without NLTK
 class SimpleSentimentAnalyzer:
@@ -432,18 +429,48 @@ def calculate_estimated_duration(questions):
 
 def update_performance_metrics(analysis, word_count, response_time):
     """Update performance tracking metrics"""
-    metrics = session['performance_metrics']
+    metrics = session.get('performance_metrics', {
+        'technical_scores': [],
+        'communication_scores': [],
+        'behavioral_scores': [],
+        'word_counts': [],
+        'response_times': []
+    })
     metrics['technical_scores'].append(analysis['scores']['technical'])
     metrics['communication_scores'].append(analysis['scores']['communication'])
     metrics['behavioral_scores'].append(analysis['scores']['behavioral'])
     metrics['word_counts'].append(word_count)
     metrics['response_times'].append(response_time)
-    session.modified = True
+    session['performance_metrics'] = metrics
 
 def calculate_final_results():
     """Calculate comprehensive final results"""
-    metrics = session['performance_metrics']
-    conversation = session['conversation']
+    metrics = session.get('performance_metrics', {
+        'technical_scores': [],
+        'communication_scores': [],
+        'behavioral_scores': [],
+        'word_counts': [],
+        'response_times': []
+    })
+    conversation = session.get('conversation', [])
+    
+    if not metrics['technical_scores']:
+        return {
+            'domain': session.get('domain', 'Unknown'),
+            'difficulty': session.get('difficulty', 'intermediate'),
+            'interview_type': session.get('interview_type', 'mixed'),
+            'completion_time': datetime.now().isoformat(),
+            'scores': {
+                'overall': 0,
+                'technical': 0,
+                'communication': 0,
+                'behavioral': 0
+            },
+            'metrics': metrics,
+            'insights': ['No data available for analysis'],
+            'conversation': conversation,
+            'recommendations': ['Complete an interview session to get recommendations']
+        }
     
     # Calculate averages
     avg_technical = sum(metrics['technical_scores']) / len(metrics['technical_scores'])
@@ -456,9 +483,9 @@ def calculate_final_results():
     insights = generate_insights(metrics, conversation)
     
     return {
-        'domain': session['domain'],
-        'difficulty': session['difficulty'],
-        'interview_type': session['interview_type'],
+        'domain': session.get('domain', 'Unknown'),
+        'difficulty': session.get('difficulty', 'intermediate'),
+        'interview_type': session.get('interview_type', 'mixed'),
         'completion_time': datetime.now().isoformat(),
         'scores': {
             'overall': round(overall_score, 1),
@@ -501,10 +528,10 @@ def generate_recommendations(metrics, insights):
     """Generate personalized recommendations"""
     recommendations = []
     
-    if avg(metrics['technical_scores']) < 7:
+    if metrics['technical_scores'] and avg(metrics['technical_scores']) < 7:
         recommendations.append("Practice explaining core concepts in your field using simple analogies.")
     
-    if avg(metrics['communication_scores']) < 7:
+    if metrics['communication_scores'] and avg(metrics['communication_scores']) < 7:
         recommendations.append("Work on structuring responses with clear introductions and conclusions.")
     
     if metrics['response_times'] and avg(metrics['response_times']) > 150:
@@ -521,25 +548,18 @@ def avg(lst):
 # Routes
 @app.route('/')
 def index():
-    try:
-        session.clear()
-        questions_data = load_questions()
-        domains = list(questions_data['domains'].keys())
-        return render_template('index.html', domains=domains)
-    except Exception as e:
-        print(f"Error in index route: {e}")
-        return render_template('error.html', message="Service temporarily unavailable")
+    session.clear()
+    questions_data = load_questions()
+    domains = list(questions_data['domains'].keys())
+    return render_template('index.html', domains=domains)
 
 @app.route('/interview')
 def interview():
     """Interview page route"""
-    try:
-        if 'questions' not in session:
-            return redirect('/')
-        return render_template('interview.html')
-    except Exception as e:
-        print(f"Error in interview route: {e}")
+    if 'questions' not in session:
         return redirect('/')
+    return render_template('interview.html')
+
 @app.route('/results')
 def results():
     if 'interview_results' not in session:
@@ -724,9 +744,6 @@ def submit_answer():
             session['interview_results'] = final_results
             response_data['final_results'] = final_results
         
-        # Save session modifications
-        session.modified = True
-        
         return jsonify(response_data)
         
     except Exception as e:
@@ -795,9 +812,6 @@ def internal_error(error):
     return render_template('error.html', message="Internal server error"), 500
 
 # Only run if this file is executed directly
-# At the end of app.py, replace the existing __main__ block with:
-
-# Only run if this file is executed directly
 if __name__ == '__main__':
     # Get port from environment variable or default to 5000
     port = int(os.environ.get('PORT', 5000))
@@ -807,6 +821,4 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=port,
         debug=False  # Always False in production
-
     )
-
