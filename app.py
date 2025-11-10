@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, jsonify, session, send_file, redirect
-from flask_session import Session
 import json
 import random
 import re
@@ -10,10 +11,8 @@ from datetime import datetime, timedelta
 import io
 import math
 
-# Configuration class
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'ai-interview-chatbot-advanced-2024'
-    SESSION_TYPE = 'filesystem'
     PERMANENT_SESSION_LIFETIME = timedelta(hours=2)
     MAX_RESPONSE_TIME = 180
     MIN_WORD_COUNT = 25
@@ -22,10 +21,19 @@ class Config:
     COMMUNICATION_WEIGHT = 0.3
     BEHAVIORAL_WEIGHT = 0.3
 
-# Initialize Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Simple session management without Flask-Session
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=2)
+
+# ... [rest of your existing code]
+# Simple sentiment analysis without NLTK
+class SimpleSentimentAnalyzer:
+    # ... [rest of your existing SimpleSentimentAnalyzer class]
 # Initialize session AFTER app creation
 Session(app)
 
@@ -517,18 +525,25 @@ def avg(lst):
 # Routes
 @app.route('/')
 def index():
-    session.clear()
-    questions_data = load_questions()
-    domains = list(questions_data['domains'].keys())
-    return render_template('index.html', domains=domains)
+    try:
+        session.clear()
+        questions_data = load_questions()
+        domains = list(questions_data['domains'].keys())
+        return render_template('index.html', domains=domains)
+    except Exception as e:
+        print(f"Error in index route: {e}")
+        return render_template('error.html', message="Service temporarily unavailable")
 
 @app.route('/interview')
 def interview():
     """Interview page route"""
-    if 'questions' not in session:
+    try:
+        if 'questions' not in session:
+            return redirect('/')
+        return render_template('interview.html')
+    except Exception as e:
+        print(f"Error in interview route: {e}")
         return redirect('/')
-    return render_template('interview.html')
-
 @app.route('/results')
 def results():
     if 'interview_results' not in session:

@@ -1,5 +1,4 @@
 flask==2.3.3
-flask-session==0.4.0
 speechrecognition==3.10.0
 textblob==0.17.1
 nltk==3.8.1
