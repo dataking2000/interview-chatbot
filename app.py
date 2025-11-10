@@ -30,8 +30,6 @@ def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(hours=2)
 
-# ... [rest of your existing code]
-# Simple sentiment analysis without NLTK
 class SimpleSentimentAnalyzer:
     Session(app)
 
@@ -811,3 +809,4 @@ if __name__ == '__main__':
         debug=False  # Always False in production
 
     )
+
