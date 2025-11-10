@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - AI Interview Coach Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header animated-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>AI Interview Coach Pro</h1>
+                    <p>Advanced AI-Powered Interview Simulation Platform</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat">
+                    <span class="stat-number">Error</span>
+                    <span class="stat-label">Status</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Error Content -->
+        <main class="error-container">
+            <div class="error-card">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h2>Oops! Something went wrong</h2>
+                <p class="error-message">{{ message | default('An unexpected error occurred') }}</p>
+                
+                <div class="error-details">
+                    <div class="error-suggestion">
+                        <h3><i class="fas fa-lightbulb"></i> What you can do:</h3>
+                        <ul>
+                            <li>Refresh the page and try again</li>
+                            <li>Check your internet connection</li>
+                            <li>Return to the home page and start over</li>
+                            <li>If the problem persists, contact support</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="error-actions">
+                    <button onclick="window.location.href='/'" class="btn-primary">
+                        <i class="fas fa-home"></i>
+                        Return to Home
+                    </button>
+                    <button onclick="window.history.back()" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Go Back
+                    </button>
+                    <button onclick="location.reload()" class="btn-secondary">
+                        <i class="fas fa-redo"></i>
+                        Refresh Page
+                    </button>
+                </div>
+
+                <div class="technical-details" style="display: none;" id="techDetails">
+                    <h4><i class="fas fa-code"></i> Technical Details</h4>
+                    <div class="tech-info">
+                        <p><strong>Error Code:</strong> <span id="errorCode">Unknown</span></p>
+                        <p><strong>Timestamp:</strong> <span id="errorTime"></span></p>
+                        <p><strong>URL:</strong> <span id="errorURL">{{ request.url }}</span></p>
+                    </div>
+                </div>
+
+                <button class="tech-toggle" onclick="toggleTechDetails()">
+                    <i class="fas fa-cog"></i>
+                    <span id="techToggleText">Show Technical Details</span>
+                </button>
+            </div>
+
+            <!-- Support Section -->
+            <div class="support-section">
+                <h3><i class="fas fa-life-ring"></i> Need Help?</h3>
+                <div class="support-options">
+                    <div class="support-option">
+                        <div class="support-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4>Documentation</h4>
+                        <p>Check our user guide for detailed instructions</p>
+                    </div>
+                    <div class="support-option">
+                        <div class="support-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h4>Contact Support</h4>
+                        <p>Email us at support@aiinterviewcoach.com</p>
+                    </div>
+                    <div class="support-option">
+                        <div class="support-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h4>Community</h4>
+                        <p>Join our community forum for help</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current time
+            document.getElementById('errorTime').textContent = new Date().toLocaleString();
+            
+            // Try to get error code from URL or default to 500
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorCode = urlParams.get('code') || '500';
+            document.getElementById('errorCode').textContent = errorCode;
+        });
+
+        function toggleTechDetails() {
+            const techDetails = document.getElementById('techDetails');
+            const toggleText = document.getElementById('techToggleText');
+            
+            if (techDetails.style.display === 'none') {
+                techDetails.style.display = 'block';
+                toggleText.textContent = 'Hide Technical Details';
+            } else {
+                techDetails.style.display = 'none';
+                toggleText.textContent = 'Show Technical Details';
+            }
+        }
+
+        // Add custom styles for error page
+        const errorStyles = `
+            .error-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .error-card {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-radius: var(--border-radius-xl);
+                padding: 40px;
+                text-align: center;
+                box-shadow: var(--shadow-xl);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                margin-bottom: 30px;
+            }
+            .error-icon {
+                font-size: 4rem;
+                color: var(--danger);
+                margin-bottom: 20px;
+            }
+            .error-card h2 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--gray-900);
+                margin-bottom: 15px;
+            }
+            .error-message {
+                font-size: 1.1rem;
+                color: var(--gray-600);
+                margin-bottom: 30px;
+                line-height: 1.6;
+            }
+            .error-details {
+                text-align: left;
+                margin: 30px 0;
+                padding: 25px;
+                background: var(--gray-50);
+                border-radius: var(--border-radius);
+                border-left: 4px solid var(--warning);
+            }
+            .error-suggestion h3 {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+                color: var(--gray-800);
+            }
+            .error-suggestion ul {
+                list-style: none;
+                padding-left: 0;
+            }
+            .error-suggestion li {
+                padding: 8px 0;
+                border-bottom: 1px solid var(--gray-200);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .error-suggestion li:before {
+                content: '•';
+                color: var(--primary);
+                font-weight: bold;
+            }
+            .error-suggestion li:last-child {
+                border-bottom: none;
+            }
+            .error-actions {
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+                margin: 30px 0;
+                flex-wrap: wrap;
+            }
+            .technical-details {
+                text-align: left;
+                margin: 25px 0;
+                padding: 20px;
+                background: var(--gray-50);
+                border-radius: var(--border-radius);
+                border: 1px solid var(--gray-200);
+            }
+            .technical-details h4 {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+                color: var(--gray-800);
+            }
+            .tech-info p {
+                margin: 8px 0;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9rem;
+            }
+            .tech-toggle {
+                background: none;
+                border: 2px solid var(--gray-300);
+                color: var(--gray-600);
+                padding: 10px 20px;
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 0 auto;
+                transition: all 0.3s ease;
+            }
+            .tech-toggle:hover {
+                border-color: var(--primary);
+                color: var(--primary);
+            }
+            .support-section {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-radius: var(--border-radius-xl);
+                padding: 30px;
+                box-shadow: var(--shadow-xl);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            .support-section h3 {
+                text-align: center;
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                color: var(--gray-800);
+            }
+            .support-options {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            .support-option {
+                text-align: center;
+                padding: 20px;
+                background: white;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-md);
+                transition: transform 0.3s ease;
+            }
+            .support-option:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+            .support-icon {
+                width: 60px;
+                height: 60px;
+                background: var(--gradient-primary);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 15px;
+                color: white;
+                font-size: 1.5rem;
+            }
+            .support-option h4 {
+                margin-bottom: 10px;
+                color: var(--gray-800);
+            }
+            .support-option p {
+                color: var(--gray-600);
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            @media (max-width: 768px) {
+                .error-card {
+                    padding: 25px;
+                }
+                .error-actions {
+                    flex-direction: column;
+                }
+                .error-actions button {
+                    width: 100%;
+                }
+                .support-options {
+                    grid-template-columns: 1fr;
+                }
+            }
+        `;
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = errorStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

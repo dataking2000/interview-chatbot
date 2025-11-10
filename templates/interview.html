@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Session - AI Interview Coach Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Interview Header -->
+        <header class="header animated-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>AI Interview Session</h1>
+                    <p>Real-time AI-powered interview simulation</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat">
+                    <span class="stat-number" id="currentQuestionNum">1</span>
+                    <span class="stat-label">Current</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="totalQuestions">-</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="mainTimer">03:00</span>
+                    <span class="stat-label">Time Left</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="interview-container">
+            <!-- Left Panel: Conversation and Question -->
+            <div class="conversation-panel">
+                <div class="conversation-header">
+                    <h3><i class="fas fa-exchange-alt"></i> Interview Conversation</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">Question 0/0</span>
+                    </div>
+                </div>
+                
+                <div class="conversation-messages" id="conversationPanel">
+                    <!-- Messages will be dynamically added here -->
+                    <div class="welcome-message">
+                        <div class="message question">
+                            <div class="message-header">
+                                <span class="message-sender">
+                                    <i class="fas fa-robot"></i>
+                                    AI Interviewer
+                                </span>
+                                <span class="message-time" id="currentTime"></span>
+                            </div>
+                            <div class="message-content">
+                                <p>Welcome to your AI interview session! I'll be asking you a series of questions to evaluate your skills and knowledge. Take your time to provide thoughtful responses.</p>
+                                <p>Ready when you are! The first question will appear shortly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Question Section -->
+                <div class="question-container" id="questionContainer">
+                    <div class="question-header">
+                        <span class="question-type" id="questionType">Technical Question</span>
+                        <span class="timer" id="questionTimer">03:00</span>
+                    </div>
+                    <div class="current-question" id="currentQuestionText">
+                        Loading your first question...
+                    </div>
+                    <div class="question-metadata">
+                        <span class="difficulty-badge" id="difficultyBadge">Intermediate</span>
+                        <span class="expected-time"><i class="fas fa-clock"></i> Expected: <span id="expectedTime">3 min</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Answer Input and Feedback -->
+            <div class="input-panel">
+                <!-- Answer Input Section -->
+                <div class="answer-section">
+                    <h3><i class="fas fa-edit"></i> Your Response</h3>
+                    
+                    <form id="answerForm" class="answer-form">
+                        <div class="form-group">
+                            <label for="userAnswer">Type your answer below:</label>
+                            <textarea 
+                                id="userAnswer" 
+                                name="userAnswer" 
+                                placeholder="Type your response here... You can also use voice recording for hands-free answering."
+                                rows="8"
+                                maxlength="2000"
+                            ></textarea>
+                            <div class="word-count">
+                                <span id="wordCount">0 words</span>
+                                <span class="char-count"><span id="charCount">0</span>/2000 characters</span>
+                            </div>
+                        </div>
+
+                        <!-- Speech Controls -->
+                        <div class="speech-controls" id="speechControls">
+                            <button type="button" class="record-btn" id="recordBtn">
+                                <i class="fas fa-microphone"></i>
+                                <span id="recordBtnText">Start Recording</span>
+                            </button>
+                            <div class="audio-visualizer">
+                                <div class="audio-level" id="audioLevel"></div>
+                            </div>
+                            <div class="recording-status" id="recordingStatus">
+                                Ready to record
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="skipBtn">
+                                <i class="fas fa-forward"></i>
+                                Skip Question
+                            </button>
+                            <button type="submit" class="btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Answer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Real-time Feedback Section -->
+                <div class="feedback-panel" id="feedbackPanel">
+                    <div class="feedback-header">
+                        <h3><i class="fas fa-chart-bar"></i> Performance Feedback</h3>
+                    </div>
+
+                    <!-- Score Cards -->
+                    <div class="score-cards">
+                        <div class="score-card technical">
+                            <div class="score-label">Technical</div>
+                            <div class="score-value" id="technicalScore">-</div>
+                            <div class="score-max">/10</div>
+                        </div>
+                        <div class="score-card communication">
+                            <div class="score-label">Communication</div>
+                            <div class="score-value" id="communicationScore">-</div>
+                            <div class="score-max">/10</div>
+                        </div>
+                        <div class="score-card behavioral">
+                            <div class="score-label">Behavioral</div>
+                            <div class="score-value" id="behavioralScore">-</div>
+                            <div class="score-max">/10</div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Feedback -->
+                    <div class="feedback-sections">
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-lightbulb"></i> Technical Feedback</h4>
+                            <ul class="feedback-list" id="technicalFeedback">
+                                <li>Your technical feedback will appear here after each response.</li>
+                            </ul>
+                        </div>
+
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-comments"></i> Communication Tips</h4>
+                            <ul class="feedback-list" id="communicationFeedback">
+                                <li>Communication analysis will be provided here.</li>
+                            </ul>
+                        </div>
+
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-rocket"></i> Improvement Suggestions</h4>
+                            <ul class="suggestions-list" id="improvementSuggestions">
+                                <li>Personalized suggestions will appear here.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Strengths Highlight -->
+                    <div class="strengths-section" id="strengthsSection" style="display: none;">
+                        <h4><i class="fas fa-star"></i> Strengths Highlighted</h4>
+                        <div class="strengths-list" id="strengthsList">
+                            <!-- Strengths will be dynamically added -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Processing Your Response</h3>
+            <p>Analyzing your answer with AI... This may take a few seconds.</p>
+        </div>
+    </div>
+
+    <!-- Interview Complete Modal -->
+    <div id="completeModal" class="modal" style="display: none;">
+        <div class="modal-content complete-content">
+            <div class="complete-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Interview Complete! 🎉</h3>
+            <p>You've successfully completed all interview questions. Great job!</p>
+            <div class="final-scores-preview">
+                <div class="final-score">
+                    <span class="score-label">Overall Score</span>
+                    <span class="score-value" id="finalOverallScore">-</span>
+                </div>
+                <div class="score-breakdown">
+                    <div class="breakdown-item">
+                        <span>Technical</span>
+                        <span id="finalTechnicalScore">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Communication</span>
+                        <span id="finalCommunicationScore">-</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Behavioral</span>
+                        <span id="finalBehavioralScore">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="complete-actions">
+                <button class="btn-primary" id="viewResultsBtn">
+                    <i class="fas fa-chart-bar"></i>
+                    View Detailed Results
+                </button>
+                <button class="btn-secondary" id="returnHomeBtn">
+                    <i class="fas fa-home"></i>
+                    Return to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Global variables
+        let currentQuestionTimer = null;
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Initialize the interview when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeInterviewSession();
+            setupEventListeners();
+            updateCurrentTime();
+            
+            // Update time every second
+            setInterval(updateCurrentTime, 1000);
+        });
+
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('answerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitAnswer();
+            });
+
+            // Skip question
+            document.getElementById('skipBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to skip this question? This will affect your overall score.')) {
+                    submitAnswer('[Skipped question]');
+                }
+            });
+
+            // Voice recording
+            document.getElementById('recordBtn').addEventListener('click', toggleRecording);
+
+            // Word count tracking
+            document.getElementById('userAnswer').addEventListener('input', updateWordCount);
+
+            // Modal buttons
+            document.getElementById('viewResultsBtn').addEventListener('click', viewDetailedResults);
+            document.getElementById('returnHomeBtn').addEventListener('click', continueToHome);
+        }
+
+        function initializeInterviewSession() {
+            // Load the current question from the server
+            loadCurrentQuestion();
+        }
+
+        function loadCurrentQuestion() {
+            showLoadingModal();
+            
+            fetch('/get_current_question')
+                .then(response => response.json())
+                .then(data => {
+                    hideLoadingModal();
+                    
+                    if (data.interview_complete) {
+                        showCompleteModal();
+                        return;
+                    }
+
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                        window.location.href = '/';
+                        return;
+                    }
+
+                    // Update UI with question data
+                    document.getElementById('currentQuestionText').textContent = data.question;
+                    document.getElementById('questionType').textContent = 
+                        data.metadata.type === 'technical' ? 'Technical Question' : 'Behavioral Question';
+                    document.getElementById('difficultyBadge').textContent = 
+                        data.metadata.difficulty.charAt(0).toUpperCase() + data.metadata.difficulty.slice(1);
+                    document.getElementById('expectedTime').textContent = 
+                        Math.floor(data.metadata.expected_time / 60) + ' min';
+                    
+                    // Update progress
+                    document.getElementById('currentQuestionNum').textContent = data.current_progress.current;
+                    document.getElementById('totalQuestions').textContent = data.current_progress.total;
+                    document.getElementById('progressText').textContent = 
+                        `Question ${data.current_progress.current}/${data.current_progress.total}`;
+                    
+                    const progressPercent = (data.current_progress.current / data.current_progress.total) * 100;
+                    document.getElementById('progressFill').style.width = `${progressPercent}%`;
+                    
+                    // Start timer
+                    startQuestionTimer(data.metadata.expected_time);
+                    
+                    // Add question to conversation if it's new
+                    const conversation = document.getElementById('conversationPanel');
+                    const lastMessage = conversation.lastElementChild;
+                    if (!lastMessage || !lastMessage.querySelector('.message-content').textContent.includes(data.question)) {
+                        addMessageToConversation('question', data.question);
+                    }
+                    
+                })
+                .catch(error => {
+                    hideLoadingModal();
+                    console.error('Error loading question:', error);
+                    alert('Failed to load question. Please try again.');
+                });
+        }
+
+        function startQuestionTimer(duration) {
+            // Clear existing timer
+            if (currentQuestionTimer) {
+                clearInterval(currentQuestionTimer);
+            }
+
+            let timeLeft = duration;
+            const timerElement = document.getElementById('questionTimer');
+            const mainTimerElement = document.getElementById('mainTimer');
+            
+            updateTimerDisplay(timeLeft, timerElement, mainTimerElement);
+            
+            currentQuestionTimer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay(timeLeft, timerElement, mainTimerElement);
+                
+                if (timeLeft <= 0) {
+                    clearInterval(currentQuestionTimer);
+                    // Auto-submit when time runs out
+                    const answer = document.getElementById('userAnswer').value.trim() || '[Time expired]';
+                    submitAnswer(answer);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(timeLeft, timerElement, mainTimerElement) {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timerElement) timerElement.textContent = timeString;
+            if (mainTimerElement) mainTimerElement.textContent = timeString;
+            
+            // Visual warnings
+            if (timeLeft < 30) {
+                if (timerElement) timerElement.style.background = 'var(--danger)';
+                if (mainTimerElement) mainTimerElement.style.background = 'var(--danger)';
+            } else if (timeLeft < 60) {
+                if (timerElement) timerElement.style.background = 'var(--warning)';
+                if (mainTimerElement) mainTimerElement.style.background = 'var(--warning)';
+            }
+        }
+
+        function submitAnswer(answerText = null) {
+            const answer = answerText || document.getElementById('userAnswer').value.trim();
+            if (!answer) {
+                alert('Please enter your answer before submitting.');
+                return;
+            }
+
+            showLoadingModal();
+            
+            // Add user's answer to conversation
+            addMessageToConversation('answer', answer);
+            
+            // Clear the answer area
+            document.getElementById('userAnswer').value = '';
+            updateWordCount();
+
+            // Submit to backend
+            fetch('/submit_answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    answer: answer,
+                    response_time: 0, // You can calculate this based on timer
+                    audio_data: null // Add audio data if recording was used
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideLoadingModal();
+                
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+
+                // Update feedback
+                if (data.analysis) {
+                    updateFeedback(data.analysis);
+                }
+
+                // Check if interview is complete
+                if (data.interview_complete && data.final_results) {
+                    // Store results in session storage for results page
+                    sessionStorage.setItem('interviewResults', JSON.stringify(data.final_results));
+                    showCompleteModal(data.final_results);
+                } else {
+                    // Load next question after a delay
+                    setTimeout(() => {
+                        loadCurrentQuestion();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                hideLoadingModal();
+                console.error('Error submitting answer:', error);
+                alert('Failed to submit answer. Please try again.');
+            });
+        }
+
+        // Voice Recording Functions
+        async function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                await startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    // You can upload this blob to your server
+                    console.log('Recording stopped, audio blob:', audioBlob);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                updateRecordingUI();
+
+                // Auto-stop after 3 minutes
+                setTimeout(() => {
+                    if (isRecording) {
+                        stopRecording();
+                    }
+                }, 180000);
+
+            } catch (error) {
+                console.error('Error starting recording:', error);
+                alert('Microphone access denied or not available.');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+                updateRecordingUI();
+            }
+        }
+
+        function updateRecordingUI() {
+            const recordBtn = document.getElementById('recordBtn');
+            const recordBtnText = document.getElementById('recordBtnText');
+            const recordingStatus = document.getElementById('recordingStatus');
+
+            if (isRecording) {
+                recordBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Recording';
+                recordBtn.classList.add('recording');
+                recordBtnText.textContent = 'Stop Recording';
+                recordingStatus.textContent = 'Recording... Click stop when done.';
+                recordingStatus.style.color = 'var(--danger)';
+            } else {
+                recordBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Recording';
+                recordBtn.classList.remove('recording');
+                recordBtnText.textContent = 'Start Recording';
+                recordingStatus.textContent = 'Ready to record';
+                recordingStatus.style.color = 'var(--gray-600)';
+            }
+        }
+
+        // UI Helper Functions
+        function addMessageToConversation(type, content) {
+            const conversationPanel = document.getElementById('conversationPanel');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const timestamp = new Date().toLocaleTimeString();
+
+            let sender = '';
+            let icon = '';
+
+            switch (type) {
+                case 'question':
+                    sender = '🤖 AI Interviewer';
+                    icon = 'robot';
+                    break;
+                case 'answer':
+                    sender = '👤 You';
+                    icon = 'user';
+                    break;
+                case 'feedback':
+                    sender = '📊 AI Analysis';
+                    icon = 'chart-bar';
+                    break;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-sender">
+                        <i class="fas fa-${icon}"></i>
+                        ${sender}
+                    </span>
+                    <span class="message-time">${timestamp}</span>
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+
+            conversationPanel.appendChild(messageDiv);
+            conversationPanel.scrollTop = conversationPanel.scrollHeight;
+        }
+
+        function updateWordCount() {
+            const textarea = document.getElementById('userAnswer');
+            const text = textarea.value.trim();
+            const words = text.length > 0 ? text.split(/\s+/).length : 0;
+            const chars = text.length;
+            
+            document.getElementById('wordCount').textContent = `${words} words`;
+            document.getElementById('charCount').textContent = chars;
+            
+            // Visual feedback
+            const wordCountElement = document.getElementById('wordCount');
+            if (words < 25) {
+                wordCountElement.style.color = 'var(--danger)';
+            } else if (words < 50) {
+                wordCountElement.style.color = 'var(--warning)';
+            } else {
+                wordCountElement.style.color = 'var(--success)';
+            }
+        }
+
+        function updateFeedback(analysis) {
+            // Update scores
+            if (analysis.scores) {
+                document.getElementById('technicalScore').textContent = analysis.scores.technical || '-';
+                document.getElementById('communicationScore').textContent = analysis.scores.communication || '-';
+                document.getElementById('behavioralScore').textContent = analysis.scores.behavioral || '-';
+            }
+            
+            // Update feedback lists
+            if (analysis.detailed_feedback) {
+                updateFeedbackList('technicalFeedback', analysis.detailed_feedback.technical);
+                updateFeedbackList('communicationFeedback', analysis.detailed_feedback.communication);
+            }
+            
+            if (analysis.improvement_suggestions) {
+                updateFeedbackList('improvementSuggestions', analysis.improvement_suggestions);
+            }
+            
+            // Update strengths
+            if (analysis.strengths && analysis.strengths.length > 0) {
+                document.getElementById('strengthsSection').style.display = 'block';
+                const strengthsList = document.getElementById('strengthsList');
+                strengthsList.innerHTML = analysis.strengths.map(strength => 
+                    `<div class="strength-item"><i class="fas fa-check"></i> ${strength}</div>`
+                ).join('');
+            }
+            
+            // Add feedback to conversation
+            if (analysis.scores) {
+                addMessageToConversation('feedback', 
+                    `Technical: ${analysis.scores.technical}/10, Communication: ${analysis.scores.communication}/10, Behavioral: ${analysis.scores.behavioral}/10`
+                );
+            }
+        }
+
+        function updateFeedbackList(elementId, items) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            if (Array.isArray(items)) {
+                element.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+            } else if (items) {
+                element.innerHTML = `<li>${items}</li>`;
+            }
+        }
+
+        function showLoadingModal() {
+            document.getElementById('loadingModal').style.display = 'flex';
+        }
+
+        function hideLoadingModal() {
+            document.getElementById('loadingModal').style.display = 'none';
+        }
+
+        function showCompleteModal(results) {
+            if (results && results.scores) {
+                document.getElementById('finalOverallScore').textContent = results.scores.overall + '/10';
+                document.getElementById('finalTechnicalScore').textContent = results.scores.technical + '/10';
+                document.getElementById('finalCommunicationScore').textContent = results.scores.communication + '/10';
+                document.getElementById('finalBehavioralScore').textContent = results.scores.behavioral + '/10';
+            }
+            document.getElementById('completeModal').style.display = 'flex';
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+
+        function viewDetailedResults() {
+            window.location.href = '/results';
+        }
+
+        function continueToHome() {
+            window.location.href = '/';
+        }
+
+        // Add CSS for recording state
+        const additionalStyles = `
+            .record-btn.recording {
+                background: var(--danger) !important;
+                animation: pulse 1.5s infinite;
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+        `;
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

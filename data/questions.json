@@ -1,0 +1,349 @@
+{
+  "domains": {
+    "Software Engineering": {
+      "description": "Technical interviews for software development roles",
+      "questions": [
+        {
+          "question": "Explain object-oriented programming and its main principles with real-world examples.",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["encapsulation", "inheritance", "polymorphism", "abstraction", "classes", "objects"],
+          "expected_time": 120,
+          "category": "fundamentals"
+        },
+        {
+          "question": "What's the difference between SQL and NoSQL databases? Provide use cases for each.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["relational", "non-relational", "structured", "unstructured", "scalability", "consistency", "ACID", "BASE"],
+          "expected_time": 180,
+          "category": "databases"
+        },
+        {
+          "question": "Describe a challenging technical problem you solved and walk through your approach step by step.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["problem-solving", "debugging", "analysis", "solution", "results", "challenge"],
+          "expected_time": 240,
+          "category": "problem_solving"
+        },
+        {
+          "question": "How would you design a URL shortening service like TinyURL? Consider scalability and data storage.",
+          "type": "technical",
+          "difficulty": "advanced",
+          "keywords": ["system design", "scalability", "hashing", "database", "cache", "load balancing"],
+          "expected_time": 300,
+          "category": "system_design"
+        },
+        {
+          "question": "Explain the concept of technical debt and how you manage it in software projects.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["technical debt", "refactoring", "maintenance", "code quality", "trade-offs"],
+          "expected_time": 150,
+          "category": "software_engineering"
+        },
+        {
+          "question": "Tell me about a time you had to learn a new technology quickly to complete a project.",
+          "type": "behavioral",
+          "difficulty": "beginner",
+          "keywords": ["learning", "adaptability", "project", "technology", "quickly"],
+          "expected_time": 180,
+          "category": "adaptability"
+        },
+        {
+          "question": "What are microservices and when would you choose them over a monolith architecture?",
+          "type": "technical",
+          "difficulty": "advanced",
+          "keywords": ["microservices", "monolith", "distributed systems", "scalability", "deployment"],
+          "expected_time": 240,
+          "category": "architecture"
+        },
+        {
+          "question": "How do you ensure code quality and maintainability in a large codebase?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["code review", "testing", "documentation", "standards", "CI/CD"],
+          "expected_time": 180,
+          "category": "best_practices"
+        }
+      ]
+    },
+    "Data Science": {
+      "description": "Interviews for data analysis and machine learning roles",
+      "questions": [
+        {
+          "question": "Explain the bias-variance tradeoff in machine learning with practical examples.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["bias", "variance", "overfitting", "underfitting", "model complexity", "generalization"],
+          "expected_time": 180,
+          "category": "ml_fundamentals"
+        },
+        {
+          "question": "How would you handle missing data in a large dataset? Discuss multiple approaches.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["missing data", "imputation", "deletion", "mean", "median", "model-based"],
+          "expected_time": 150,
+          "category": "data_preprocessing"
+        },
+        {
+          "question": "Describe a data science project where you had to communicate complex results to non-technical stakeholders.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["communication", "visualization", "stakeholders", "simplification", "business impact"],
+          "expected_time": 210,
+          "category": "communication"
+        },
+        {
+          "question": "What's the difference between supervised and unsupervised learning? Provide real-world applications for each.",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["supervised", "unsupervised", "labeled data", "classification", "clustering", "regression"],
+          "expected_time": 120,
+          "category": "ml_fundamentals"
+        },
+        {
+          "question": "How do you evaluate the performance of a machine learning model beyond accuracy?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["evaluation", "precision", "recall", "f1-score", "ROC", "AUC", "cross-validation"],
+          "expected_time": 180,
+          "category": "model_evaluation"
+        },
+        {
+          "question": "Explain feature engineering and why it's crucial for model performance.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["feature engineering", "feature selection", "dimensionality reduction", "importance"],
+          "expected_time": 150,
+          "category": "feature_engineering"
+        },
+        {
+          "question": "Describe your experience with deep learning frameworks and a project where you used them.",
+          "type": "technical",
+          "difficulty": "advanced",
+          "keywords": ["deep learning", "neural networks", "tensorflow", "pytorch", "CNN", "RNN"],
+          "expected_time": 240,
+          "category": "deep_learning"
+        },
+        {
+          "question": "How do you stay updated with the latest developments in data science and AI?",
+          "type": "behavioral",
+          "difficulty": "beginner",
+          "keywords": ["learning", "development", "research", "community", "courses"],
+          "expected_time": 120,
+          "category": "professional_development"
+        }
+      ]
+    },
+    "Product Management": {
+      "description": "Interviews for product management and strategy roles",
+      "questions": [
+        {
+          "question": "How do you prioritize features in a product roadmap? Walk through your framework.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["prioritization", "ROI", "user value", "business value", "effort", "impact", "framework"],
+          "expected_time": 180,
+          "category": "product_strategy"
+        },
+        {
+          "question": "Describe a product you admire and analyze what makes it successful.",
+          "type": "behavioral",
+          "difficulty": "beginner",
+          "keywords": ["product analysis", "user experience", "value proposition", "market fit", "design"],
+          "expected_time": 150,
+          "category": "product_sense"
+        },
+        {
+          "question": "How would you approach defining and tracking success metrics for a new feature?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["metrics", "KPIs", "success criteria", "analytics", "tracking", "experimentation"],
+          "expected_time": 180,
+          "category": "metrics_analytics"
+        },
+        {
+          "question": "Tell me about a time you had to make a difficult product decision with incomplete data.",
+          "type": "behavioral",
+          "difficulty": "advanced",
+          "keywords": ["decision-making", "uncertainty", "data", "risk", "stakeholders"],
+          "expected_time": 210,
+          "category": "decision_making"
+        },
+        {
+          "question": "How do you gather and incorporate user feedback into product development?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["user feedback", "research", "interviews", "surveys", "usability testing"],
+          "expected_time": 150,
+          "category": "user_research"
+        },
+        {
+          "question": "Explain the difference between product vision and product strategy.",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["vision", "strategy", "goals", "execution", "roadmap"],
+          "expected_time": 120,
+          "category": "product_fundamentals"
+        },
+        {
+          "question": "Describe a time you had to manage conflicting priorities between engineering and business teams.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["conflict resolution", "stakeholder management", "communication", "negotiation"],
+          "expected_time": 180,
+          "category": "stakeholder_management"
+        },
+        {
+          "question": "How do you conduct competitive analysis and use it to inform product decisions?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["competitive analysis", "market research", "benchmarking", "differentiation"],
+          "expected_time": 150,
+          "category": "market_analysis"
+        }
+      ]
+    },
+    "Digital Marketing": {
+      "description": "Interviews for digital marketing and growth roles",
+      "questions": [
+        {
+          "question": "How would you develop a comprehensive digital marketing strategy for a new B2C product?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["strategy", "channels", "target audience", "budget", "ROI", "KPIs"],
+          "expected_time": 240,
+          "category": "strategy_planning"
+        },
+        {
+          "question": "Explain how you measure and optimize conversion rates across different marketing channels.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["conversion rate", "optimization", "A/B testing", "analytics", "attribution"],
+          "expected_time": 180,
+          "category": "analytics_optimization"
+        },
+        {
+          "question": "Describe a successful marketing campaign you managed and what made it effective.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["campaign", "success", "metrics", "strategy", "execution", "results"],
+          "expected_time": 210,
+          "category": "campaign_management"
+        },
+        {
+          "question": "How do you approach SEO strategy for a new website?",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["SEO", "keywords", "content", "backlinks", "technical SEO", "ranking"],
+          "expected_time": 150,
+          "category": "seo"
+        },
+        {
+          "question": "What's your experience with marketing automation tools and how have you used them?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["automation", "tools", "workflows", "lead nurturing", "email marketing"],
+          "expected_time": 180,
+          "category": "marketing_technology"
+        },
+        {
+          "question": "How do you determine the right marketing mix for different stages of the customer journey?",
+          "type": "technical",
+          "difficulty": "advanced",
+          "keywords": ["marketing mix", "customer journey", "touchpoints", "conversion", "retention"],
+          "expected_time": 210,
+          "category": "customer_journey"
+        },
+        {
+          "question": "Tell me about a time you had to pivot your marketing strategy based on data insights.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["pivot", "data", "insights", "adaptability", "strategy", "results"],
+          "expected_time": 180,
+          "category": "data_driven_marketing"
+        },
+        {
+          "question": "How do you stay updated with changes in digital marketing platforms and algorithms?",
+          "type": "behavioral",
+          "difficulty": "beginner",
+          "keywords": ["learning", "updates", "platforms", "algorithms", "adaptability"],
+          "expected_time": 120,
+          "category": "professional_development"
+        }
+      ]
+    },
+    "Finance & Banking": {
+      "description": "Interviews for finance, banking, and investment roles",
+      "questions": [
+        {
+          "question": "Explain the time value of money and its importance in financial decision-making.",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["time value", "present value", "future value", "discounting", "compounding"],
+          "expected_time": 120,
+          "category": "financial_fundamentals"
+        },
+        {
+          "question": "How would you value a company using DCF analysis? Walk through the steps.",
+          "type": "technical",
+          "difficulty": "advanced",
+          "keywords": ["DCF", "valuation", "cash flows", "discount rate", "terminal value", "WACC"],
+          "expected_time": 300,
+          "category": "corporate_finance"
+        },
+        {
+          "question": "Describe the differences between equity and debt financing for a growing company.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["equity", "debt", "financing", "dilution", "interest", "risk"],
+          "expected_time": 180,
+          "category": "corporate_finance"
+        },
+        {
+          "question": "Tell me about a time you had to analyze complex financial data to make a recommendation.",
+          "type": "behavioral",
+          "difficulty": "intermediate",
+          "keywords": ["analysis", "data", "recommendation", "decision-making", "financial modeling"],
+          "expected_time": 210,
+          "category": "financial_analysis"
+        },
+        {
+          "question": "Explain the concept of risk management in portfolio construction.",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["risk management", "portfolio", "diversification", "volatility", "correlation"],
+          "expected_time": 180,
+          "category": "investment_management"
+        },
+        {
+          "question": "How do you stay current with financial markets and economic trends?",
+          "type": "behavioral",
+          "difficulty": "beginner",
+          "keywords": ["markets", "trends", "research", "analysis", "current events"],
+          "expected_time": 120,
+          "category": "market_knowledge"
+        },
+        {
+          "question": "Describe the three financial statements and how they interconnect.",
+          "type": "technical",
+          "difficulty": "beginner",
+          "keywords": ["income statement", "balance sheet", "cash flow", "interconnection", "accounting"],
+          "expected_time": 150,
+          "category": "accounting_fundamentals"
+        },
+        {
+          "question": "What factors would you consider when evaluating a potential investment?",
+          "type": "technical",
+          "difficulty": "intermediate",
+          "keywords": ["investment", "evaluation", "metrics", "risk", "return", "market position"],
+          "expected_time": 180,
+          "category": "investment_analysis"
+        }
+      ]
+    }
+  }
+}

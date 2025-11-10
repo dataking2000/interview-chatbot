@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Coach Pro - Advanced Practice Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Animated Header -->
+        <header class="header animated-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Prepify</h1>
+                    <p>Advanced AI-Powered Interview Simulation Platform</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Domains</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">AI</span>
+                    <span class="stat-label">Analysis</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 class="hero-title">Master Your Next Career Move</h2>
+                <p class="hero-subtitle">Experience the most advanced AI-powered interview simulation with real-time feedback, speech analysis, and comprehensive performance analytics.</p>
+                
+                <div class="hero-features">
+                    <div class="feature-tag">
+                        <i class="fas fa-brain"></i>
+                        <span>AI-Powered Analysis</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="fas fa-microphone"></i>
+                        <span>Speech Recognition</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Performance Analytics</span>
+                    </div>
+                    <div class="feature-tag">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF Reports</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interview Configuration -->
+        <section class="config-section">
+            <div class="config-card">
+                <h3><i class="fas fa-cog"></i> Configure Your Practice Interview</h3>
+                
+                <form id="interviewConfig" class="config-form">
+                    <!-- Domain Selection -->
+                    <div class="form-section">
+                        <label class="section-label">
+                            <i class="fas fa-briefcase"></i>
+                            Select Career Domain
+                        </label>
+                        <div class="domain-grid" id="domainGrid">
+                            {% for domain in domains %}
+                            <div class="domain-card" data-domain="{{ domain }}">
+                                <div class="domain-icon">
+                                    <i class="fas fa-{{ get_domain_icon(domain) }}"></i>
+                                </div>
+                                <div class="domain-info">
+                                    <h4>{{ domain }}</h4>
+                                    <p>{{ get_domain_description(domain) }}</p>
+                                </div>
+                                <div class="domain-check">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Difficulty & Type -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="difficulty">
+                                <i class="fas fa-signal"></i>
+                                Experience Level
+                            </label>
+                            <select id="difficulty" name="difficulty" class="advanced-select">
+                                <option value="beginner">Beginner (0-2 years)</option>
+                                <option value="intermediate" selected>Intermediate (2-5 years)</option>
+                                <option value="advanced">Advanced (5+ years)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="interviewType">
+                                <i class="fas fa-list-alt"></i>
+                                Interview Type
+                            </label>
+                            <select id="interviewType" name="type" class="advanced-select">
+                                <option value="mixed">Mixed (Technical + Behavioral)</option>
+                                <option value="technical">Technical Focus</option>
+                                <option value="behavioral">Behavioral Focus</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Features Toggle -->
+                    <div class="features-section">
+                        <label class="section-label">
+                            <i class="fas fa-star"></i>
+                            Enable Advanced Features
+                        </label>
+                        <div class="feature-toggles">
+                            <label class="toggle-item">
+                                <input type="checkbox" id="enableSpeech" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">
+                                    <i class="fas fa-microphone"></i>
+                                    Voice Response Analysis
+                                </span>
+                            </label>
+                            <label class="toggle-item">
+                                <input type="checkbox" id="enableTimer" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">
+                                    <i class="fas fa-clock"></i>
+                                    Response Timer
+                                </span>
+                            </label>
+                            <label class="toggle-item">
+                                <input type="checkbox" id="enableAnalytics" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Detailed Analytics
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Start Button -->
+                    <div class="action-section">
+                        <button type="submit" class="btn-primary btn-large">
+                            <i class="fas fa-rocket"></i>
+                            Start Advanced Interview Session
+                        </button>
+                        <div class="estimated-time">
+                            <i class="fas fa-hourglass-half"></i>
+                            Estimated duration: <span id="estimatedTime">15-20 minutes</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Features Showcase -->
+        <section class="features-showcase">
+            <h3>Why Choose AI Interview Coach Pro?</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>Advanced AI Analysis</h4>
+                    <p>Real-time analysis of technical knowledge, communication skills, and behavioral cues using sophisticated NLP algorithms.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon speech">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h4>Speech & Tone Analysis</h4>
+                    <p>Get feedback on your speaking pace, clarity, filler words, and professional tone with voice recording capabilities.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon analytics">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Comprehensive Analytics</h4>
+                    <p>Detailed performance metrics, progress tracking, and personalized improvement recommendations.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon report">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Professional Reports</h4>
+                    <p>Download detailed PDF reports with scores, insights, and actionable feedback for continuous improvement.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Initializing Advanced Interview Session</h3>
+            <p>Loading AI models and preparing your personalized questions...</p>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="initProgress"></div>
+                </div>
+                <span class="progress-text">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Domain selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const domainCards = document.querySelectorAll('.domain-card');
+            let selectedDomain = null;
+
+            domainCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    domainCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    selectedDomain = this.dataset.domain;
+                    
+                    // Create or update hidden input for domain
+                    let domainInput = document.querySelector('input[name="domain"]');
+                    if (!domainInput) {
+                        domainInput = document.createElement('input');
+                        domainInput.type = 'hidden';
+                        domainInput.name = 'domain';
+                        document.getElementById('interviewConfig').appendChild(domainInput);
+                    }
+                    domainInput.value = selectedDomain;
+                });
+            });
+
+            // Form submission
+            document.getElementById('interviewConfig').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!selectedDomain) {
+                    alert('Please select a career domain');
+                    return;
+                }
+
+                const formData = new FormData(this);
+                const difficulty = formData.get('difficulty');
+                const interviewType = formData.get('type');
+                const enableSpeech = document.getElementById('enableSpeech').checked;
+                const enableTimer = document.getElementById('enableTimer').checked;
+                const enableAnalytics = document.getElementById('enableAnalytics').checked;
+
+                // Show loading modal
+                document.getElementById('loadingModal').style.display = 'flex';
+
+                // Start interview
+                fetch('/start_interview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: selectedDomain,
+                        difficulty: difficulty,
+                        type: interviewType,
+                        features: {
+                            speech: enableSpeech,
+                            timer: enableTimer,
+                            analytics: enableAnalytics
+                        }
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    // Redirect to interview page
+                    setTimeout(() => {
+                        window.location.href = '/interview';
+                    }, 1500);
+                })
+                .catch(error => {
+                    document.getElementById('loadingModal').style.display = 'none';
+                    alert('Failed to start interview: ' + error.message);
+                    console.error('Interview start error:', error);
+                });
+            });
+        });
+
+        // Domain icons mapping for JavaScript fallback
+        function getDomainIcon(domain) {
+            const icons = {
+                'Software Engineering': 'code',
+                'Data Science': 'chart-line',
+                'Product Management': 'tasks',
+                'Digital Marketing': 'bullhorn',
+                'Finance & Banking': 'coins',
+                'Healthcare': 'heartbeat',
+                'Education': 'graduation-cap',
+                'Sales': 'handshake',
+                'Customer Support': 'headset',
+                'Cybersecurity': 'shield-alt',
+                'Cloud Architecture': 'cloud',
+                'AI & ML': 'brain',
+                'DevOps': 'cogs',
+                'UX Design': 'pencil-ruler',
+                'Project Management': 'project-diagram',
+                'HR & Recruitment': 'users',
+                'Legal': 'balance-scale'
+            };
+            return icons[domain] || 'briefcase';
+        }
+
+        // Domain descriptions for JavaScript fallback
+        function getDomainDescription(domain) {
+            const descriptions = {
+                'Software Engineering': 'Technical interviews for software development roles',
+                'Data Science': 'ML, analytics, and data engineering interviews',
+                'Product Management': 'Product strategy and leadership interviews',
+                'Digital Marketing': 'Marketing strategy and growth interviews',
+                'Finance & Banking': 'Finance, investment, and banking interviews'
+            };
+            return descriptions[domain] || 'Professional interview practice';
+        }
+    </script>
+</body>
+</html>

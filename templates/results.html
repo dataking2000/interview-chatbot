@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Results - AI Interview Coach Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Results Header -->
+        <header class="header animated-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Interview Performance Report</h1>
+                    <p>Detailed analysis of your interview performance</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat">
+                    <span class="stat-number" id="overallScore">-</span>
+                    <span class="stat-label">Overall Score</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="totalQuestions">-</span>
+                    <span class="stat-label">Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="completionTime">-</span>
+                    <span class="stat-label">Minutes</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="results-container">
+            <!-- Score Overview -->
+            <section class="results-header">
+                <h2>🎉 Interview Complete!</h2>
+                <p>Here's your detailed performance analysis and personalized recommendations</p>
+                
+                <div class="score-overview">
+                    <div class="overall-score-card">
+                        <div class="score-circle-large">
+                            <span class="score-percent-large" id="overallScoreLarge">0%</span>
+                        </div>
+                        <div class="score-breakdown-large">
+                            <div class="breakdown-item-large">
+                                <span class="breakdown-label">Technical</span>
+                                <span class="breakdown-value" id="technicalScoreLarge">-</span>
+                            </div>
+                            <div class="breakdown-item-large">
+                                <span class="breakdown-label">Communication</span>
+                                <span class="breakdown-value" id="communicationScoreLarge">-</span>
+                            </div>
+                            <div class="breakdown-item-large">
+                                <span class="breakdown-label">Behavioral</span>
+                                <span class="breakdown-value" id="behavioralScoreLarge">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Charts -->
+            <section class="charts-section">
+                <h3><i class="fas fa-chart-line"></i> Performance Analytics</h3>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h4><i class="fas fa-target"></i> Skills Radar</h4>
+                        <div class="chart-container">
+                            <canvas id="finalScoreChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4><i class="fas fa-tasks"></i> Progress Tracking</h4>
+                        <div class="chart-container">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Improvement Areas</h4>
+                        <div class="chart-container">
+                            <canvas id="improvementChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4><i class="fas fa-distribute-spacing-vertical"></i> Score Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Performance Breakdown -->
+            <section class="detailed-results">
+                <div class="performance-breakdown">
+                    <h3><i class="fas fa-chart-pie"></i> Detailed Performance Breakdown</h3>
+                    <div class="breakdown-grid" id="performanceBreakdown">
+                        <!-- Dynamically filled by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="insights-section">
+                    <h3><i class="fas fa-lightbulb"></i> Key Insights</h3>
+                    <div class="insights-grid" id="keyInsights">
+                        <!-- Dynamically filled by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personalized Recommendations -->
+            <section class="recommendations-section">
+                <h3><i class="fas fa-graduation-cap"></i> Personalized Improvement Plan</h3>
+                <div class="recommendations-grid" id="improvementRecommendations">
+                    <!-- Dynamically filled by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Conversation History -->
+            <section class="conversation-history">
+                <h3><i class="fas fa-comments"></i> Interview Conversation</h3>
+                <div class="conversation-review" id="conversationReview">
+                    <!-- Dynamically filled by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section class="results-actions">
+                <button onclick="window.location.href='/'" class="btn-primary">
+                    <i class="fas fa-redo"></i>
+                    Practice Another Interview
+                </button>
+                <button onclick="downloadPDFReport()" class="btn-secondary">
+                    <i class="fas fa-file-pdf"></i>
+                    Download PDF Report
+                </button>
+                <button onclick="exportCharts()" class="btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Export Charts
+                </button>
+                <button onclick="shareResults()" class="btn-secondary">
+                    <i class="fas fa-share"></i>
+                    Share Results
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script>
+        // Load and display results
+        document.addEventListener('DOMContentLoaded', function() {
+            const results = JSON.parse(sessionStorage.getItem('interviewResults'));
+            if (results) {
+                displayResults(results);
+            } else {
+                // Redirect to home if no results
+                window.location.href = '/';
+            }
+        });
+
+        function displayResults(results) {
+            // Update header scores
+            document.getElementById('overallScore').textContent = results.scores.overall + '/10';
+            document.getElementById('overallScoreLarge').textContent = results.scores.overall + '/10';
+            document.getElementById('technicalScoreLarge').textContent = results.scores.technical + '/10';
+            document.getElementById('communicationScoreLarge').textContent = results.scores.communication + '/10';
+            document.getElementById('behavioralScoreLarge').textContent = results.scores.behavioral + '/10';
+            
+            // Update stats
+            document.getElementById('totalQuestions').textContent = results.metrics.technical_scores.length;
+            document.getElementById('completionTime').textContent = calculateCompletionTime(results.completion_time);
+
+            // Display performance breakdown
+            displayPerformanceBreakdown(results);
+            
+            // Display insights
+            displayKeyInsights(results.insights);
+            
+            // Display recommendations
+            displayRecommendations(results.recommendations);
+            
+            // Display conversation history
+            displayConversationHistory(results.conversation);
+            
+            // Initialize charts with results
+            if (window.Charts) {
+                window.Charts.displayFinalResults(results);
+            }
+        }
+
+        function displayPerformanceBreakdown(results) {
+            const breakdownGrid = document.getElementById('performanceBreakdown');
+            const metrics = results.metrics;
+            
+            const breakdownData = [
+                {
+                    category: 'Technical Knowledge',
+                    score: results.scores.technical,
+                    trend: calculateTrend(metrics.technical_scores),
+                    description: 'Depth of domain-specific knowledge'
+                },
+                {
+                    category: 'Communication Skills',
+                    score: results.scores.communication,
+                    trend: calculateTrend(metrics.communication_scores),
+                    description: 'Clarity, structure, and delivery'
+                },
+                {
+                    category: 'Behavioral Competence',
+                    score: results.scores.behavioral,
+                    trend: calculateTrend(metrics.behavioral_scores),
+                    description: 'Professionalism and example quality'
+                },
+                {
+                    category: 'Response Efficiency',
+                    score: calculateEfficiencyScore(metrics.response_times, metrics.word_counts),
+                    trend: 'stable',
+                    description: 'Balance between speed and detail'
+                }
+            ];
+
+            breakdownGrid.innerHTML = breakdownData.map(item => `
+                <div class="breakdown-item ${getScoreClass(item.score)}">
+                    <div class="breakdown-header">
+                        <h4>${item.category}</h4>
+                        <span class="trend-indicator ${item.trend}">
+                            <i class="fas fa-arrow-${getTrendIcon(item.trend)}"></i>
+                        </span>
+                    </div>
+                    <div class="breakdown-score">${item.score}/10</div>
+                    <div class="breakdown-description">${item.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function displayKeyInsights(insights) {
+            const insightsGrid = document.getElementById('keyInsights');
+            
+            if (!insights || insights.length === 0) {
+                insightsGrid.innerHTML = '<div class="no-insights">No specific insights available for this session.</div>';
+                return;
+            }
+
+            insightsGrid.innerHTML = insights.map(insight => `
+                <div class="insight-card">
+                    <div class="insight-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="insight-content">
+                        <p>${insight}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayRecommendations(recommendations) {
+            const recommendationsGrid = document.getElementById('improvementRecommendations');
+            
+            recommendationsGrid.innerHTML = recommendations.map((rec, index) => `
+                <div class="recommendation-card">
+                    <h4>
+                        <i class="fas fa-${getRecommendationIcon(index)}"></i>
+                        ${getRecommendationTitle(index)}
+                    </h4>
+                    <p>${rec}</p>
+                    <div class="recommendation-priority priority-${index % 3 + 1}">
+                        Priority: ${['High', 'Medium', 'Low'][index % 3]}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayConversationHistory(conversation) {
+            const conversationReview = document.getElementById('conversationReview');
+            
+            conversationReview.innerHTML = conversation.map(msg => `
+                <div class="conversation-message ${msg.type}">
+                    <div class="message-meta">
+                        <span class="sender">${getSenderName(msg.type)}</span>
+                        <span class="timestamp">${formatTimestamp(msg.timestamp)}</span>
+                    </div>
+                    <div class="message-content">${msg.content}</div>
+                    ${msg.analysis ? `
+                    <div class="message-feedback">
+                        <strong>Feedback:</strong> 
+                        Technical: ${msg.analysis.scores.technical}/10, 
+                        Communication: ${msg.analysis.scores.communication}/10,
+                        Behavioral: ${msg.analysis.scores.behavioral}/10
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Utility functions
+        function calculateCompletionTime(completionTime) {
+            // Calculate duration in minutes
+            const start = new Date(completionTime);
+            const end = new Date();
+            const duration = Math.round((end - start) / 60000);
+            return duration || 'N/A';
+        }
+
+        function calculateTrend(scores) {
+            if (scores.length < 2) return 'stable';
+            const firstHalf = scores.slice(0, Math.floor(scores.length / 2));
+            const secondHalf = scores.slice(Math.floor(scores.length / 2));
+            const avgFirst = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+            const avgSecond = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+            return avgSecond > avgFirst ? 'up' : avgSecond < avgFirst ? 'down' : 'stable';
+        }
+
+        function calculateEfficiencyScore(responseTimes, wordCounts) {
+            if (responseTimes.length === 0) return 5;
+            
+            const avgResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+            const avgWordCount = wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length;
+            
+            // Score based on optimal response characteristics
+            let score = 5;
+            if (avgResponseTime < 120 && avgWordCount > 50) score += 2;
+            if (avgResponseTime > 180) score -= 1;
+            if (avgWordCount < 30) score -= 1;
+            
+            return Math.max(1, Math.min(10, score));
+        }
+
+        function getScoreClass(score) {
+            if (score >= 8) return 'excellent';
+            if (score >= 6) return 'good';
+            if (score >= 4) return 'average';
+            return 'needs-improvement';
+        }
+
+        function getTrendIcon(trend) {
+            return trend === 'up' ? 'up' : trend === 'down' ? 'down' : 'right';
+        }
+
+        function getSenderName(type) {
+            return type === 'question' ? '🤖 Interviewer' : 
+                   type === 'answer' ? '👤 You' : '📊 Feedback';
+        }
+
+        function formatTimestamp(timestamp) {
+            return new Date(timestamp).toLocaleTimeString();
+        }
+
+        function getRecommendationIcon(index) {
+            const icons = ['book', 'comments', 'user-check', 'chart-line', 'hands-helping'];
+            return icons[index % icons.length];
+        }
+
+        function getRecommendationTitle(index) {
+            const titles = ['Learning Focus', 'Communication', 'Behavioral Skills', 'Technical Practice', 'Professional Development'];
+            return titles[index % titles.length];
+        }
+
+        // Action functions
+        function downloadPDFReport() {
+            window.app.downloadReport();
+        }
+
+        function exportCharts() {
+            if (window.Charts) {
+                window.Charts.exportChartsAsImage();
+            }
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Interview Performance Results',
+                    text: `I scored ${document.getElementById('overallScoreLarge').textContent} on my AI interview practice!`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                const resultsText = `Interview Performance: ${document.getElementById('overallScoreLarge').textContent}\nView full results: ${window.location.href}`;
+                navigator.clipboard.writeText(resultsText).then(() => {
+                    alert('Results copied to clipboard!');
+                });
+            }
+        }
+
+        // Add CSS for new elements
+        const additionalStyles = `
+            .score-overview {
+                text-align: center;
+                margin: 30px 0;
+            }
+            .overall-score-card {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 50px;
+                flex-wrap: wrap;
+            }
+            .score-circle-large {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 2.5rem;
+                font-weight: 800;
+                box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            }
+            .score-breakdown-large {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .breakdown-item-large {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                min-width: 200px;
+            }
+            .breakdown-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+            .trend-indicator {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+            }
+            .trend-indicator.up {
+                background: #10b981;
+                color: white;
+            }
+            .trend-indicator.down {
+                background: #ef4444;
+                color: white;
+            }
+            .trend-indicator.stable {
+                background: #6b7280;
+                color: white;
+            }
+            .insights-grid {
+                display: grid;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .insight-card {
+                display: flex;
+                gap: 15px;
+                padding: 20px;
+                background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+                border-radius: 10px;
+                border-left: 4px solid #6366f1;
+            }
+            .insight-icon {
+                width: 40px;
+                height: 40px;
+                background: #6366f1;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                flex-shrink: 0;
+            }
+            .conversation-review {
+                max-height: 400px;
+                overflow-y: auto;
+                margin-top: 20px;
+                border: 1px solid #e5e7eb;
+                border-radius: 10px;
+                padding: 20px;
+            }
+            .conversation-message {
+                margin-bottom: 20px;
+                padding: 15px;
+                border-radius: 8px;
+            }
+            .conversation-message.question {
+                background: #f0f9ff;
+                border-left: 4px solid #6366f1;
+            }
+            .conversation-message.answer {
+                background: #f0fdf4;
+                border-left: 4px solid #10b981;
+                margin-left: 40px;
+            }
+            .conversation-message.feedback {
+                background: #fffbeb;
+                border-left: 4px solid #f59e0b;
+                margin-left: 40px;
+            }
+            .message-meta {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                font-size: 0.9rem;
+                color: #6b7280;
+            }
+            .message-feedback {
+                margin-top: 10px;
+                padding: 10px;
+                background: rgba(0,0,0,0.05);
+                border-radius: 5px;
+                font-size: 0.9rem;
+            }
+            .recommendation-priority {
+                margin-top: 10px;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                display: inline-block;
+            }
+            .priority-1 { background: #fee2e2; color: #dc2626; }
+            .priority-2 { background: #fef3c7; color: #d97706; }
+            .priority-3 { background: #d1fae5; color: #059669; }
+        `;
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

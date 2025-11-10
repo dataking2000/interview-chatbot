@@ -1,0 +1,61 @@
+{
+  "technical": {
+    "weight": 0.4,
+    "factors": {
+      "keyword_coverage": {
+        "weight": 0.3,
+        "description": "Use of domain-specific terminology and concepts"
+      },
+      "conceptual_accuracy": {
+        "weight": 0.4,
+        "description": "Accuracy and depth of technical understanding"
+      },
+      "example_quality": {
+        "weight": 0.3,
+        "description": "Relevance and clarity of examples provided"
+      }
+    }
+  },
+  "communication": {
+    "weight": 0.3,
+    "factors": {
+      "clarity": {
+        "weight": 0.25,
+        "description": "Clear and understandable expression of ideas"
+      },
+      "structure": {
+        "weight": 0.25,
+        "description": "Logical organization and flow of response"
+      },
+      "conciseness": {
+        "weight": 0.25,
+        "description": "Appropriate level of detail without unnecessary verbosity"
+      },
+      "professional_tone": {
+        "weight": 0.25,
+        "description": "Appropriate business language and tone"
+      }
+    }
+  },
+  "behavioral": {
+    "weight": 0.3,
+    "factors": {
+      "confidence": {
+        "weight": 0.3,
+        "description": "Demonstrated self-assurance and conviction"
+      },
+      "enthusiasm": {
+        "weight": 0.2,
+        "description": "Positive energy and engagement level"
+      },
+      "professionalism": {
+        "weight": 0.3,
+        "description": "Appropriate conduct and business etiquette"
+      },
+      "story_structure": {
+        "weight": 0.2,
+        "description": "Effective use of storytelling frameworks (STAR method)"
+      }
+    }
+  }
+}
