@@ -786,6 +786,7 @@ def internal_error(error):
 # Only run if this file is executed directly
 # At the end of app.py, replace the existing __main__ block with:
 
+# Only run if this file is executed directly
 if __name__ == '__main__':
     # Get port from environment variable or default to 5000
     port = int(os.environ.get('PORT', 5000))

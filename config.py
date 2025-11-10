@@ -26,8 +26,7 @@ class Config:
         'ux_design', 'project_management', 'hr_recruitment', 'legal'
     ]
 
-
-    class ProductionConfig(Config):
+class ProductionConfig(Config):  # Fixed indentation
     DEBUG = False
     TESTING = False
 
